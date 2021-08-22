@@ -7,5 +7,13 @@
 	```
 	fd = shm_open(name, O_CREAT | ORDWR, 0666)
 	```
+2. Shared-Memory 객체의 크기를 지정합니다.
+	```
+	ftruncate(fd, 4096)
+	```
+3. memory-mapped file에 내용을 작성합니다.
+	```
+	mmap(0, SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0)
+	```
 ## Message Passing : Pipes
 ### Pipes : UNIX 시스템의 초기 IPC 메커니즘 중 하나입니다.
