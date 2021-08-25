@@ -15,5 +15,7 @@
 	```
 	mmap(0, SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0)
 	```
+### Share Memory 방식의 문제
+- 개발자가 직접 할당해주고, write하고 read하는 것을 전부 관리해야 합니다.
 ## Message Passing : Pipes
 ### Pipes : UNIX 시스템의 초기 IPC 메커니즘 중 하나입니다.
