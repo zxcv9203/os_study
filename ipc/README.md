@@ -67,3 +67,9 @@ ex) 여기서 관계는 부모프로세스, 자식프로세스 간의 통신같�
 ### 소켓 (Socket)
 - 포트 번호와 연결된 IP주소로 식별됩니다.
 <img width="461" alt="op" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4353c02d-e3cf-4df0-8e0b-693b126eb3c4/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210830%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210830T070405Z&X-Amz-Expires=86400&X-Amz-Signature=ac1853e84dd183e0624219453ef4446c270d4ff819306ec8d69a95ed6d523f99&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22">
+
+> Java에서 소켓 구현
+- 소켓에 대한 훨씬 쉬운 인터페이스 및 세 가지 유형의 소켓을 제공합니다.
+	- Socket class : connection-oriented (TCP)
+	- DatagramSocket class : connectionless (UDP)
+	- MulticastSocket class : multiple recipients
