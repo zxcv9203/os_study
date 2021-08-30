@@ -73,3 +73,13 @@ ex) 여기서 관계는 부모프로세스, 자식프로세스 간의 통신같�
 	- Socket class : connection-oriented (TCP)
 	- DatagramSocket class : connectionless (UDP)
 	- MulticastSocket class : multiple recipients
+### RPC (Remote Procedure Call)
+- 가장 일반적인 형태의 원격 서비스 중에 하나입니다.
+- 프로시저 호출 메커니즘을 추상화하는 방법으로 설계되었습니다.
+	- 네트워크 연결이 있는 시스템 간에 사용합니다.
+- 클라이언트가 원격 호스트에서 프로시저를 호출합니다.
+	- 로컬에서 프로시저를 호출할 수 있기 때문입니다.
+> RPC 시스템
+- 클라이언트 측에서 stub을 제공하여 통신이 이루어질 수 있는 세부 정보를 숨깁니다.
+- 클라이언트 측 스텁이 서버를 찾고 매개변수를 마샬링합니다.
+- 서버측 스텁이 이 메시지를 수신하고, 마샬링된 매개변수의 압축을 풀고, 서버에서 절차를 수행합니다.
