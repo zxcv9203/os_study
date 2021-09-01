@@ -154,4 +154,3 @@ thread에서도 이와 같이 부모 thread를 대기시킬 수 있는데 join()
 - 태스크 병렬 실행
 
 	<img src = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fae7102a-3f2e-4400-b4fc-2edf9ad1c0ed/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210901%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210901T085744Z&X-Amz-Expires=86400&X-Amz-Signature=0f36456e19d97dbfbc2b9a24ed21611efe7daa73bec8c8950744668dacc1e816&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" width = "50%" height = "50%">
-## 암달의 규칙
