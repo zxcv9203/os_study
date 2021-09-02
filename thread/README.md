@@ -45,8 +45,8 @@
 			}
 		}
 		```
-2. 실행 가능한 인터페이스 구현
-	- 실행 가능한 인터페이스를 구현하는 새 class를 정의합니다.
+2. Runnable 인터페이스 구현
+	- Runnable 인터페이스를 구현하는 새 class를 정의합니다.
 	- public void run()메서드를 재정의합니다.
 		```
 		class MyThread2 implements Runnable {
