@@ -81,10 +81,51 @@
 
 	긴 프로세스 이전에 짧은 프로세스를 먼저 처리하면 짧은 프로세스의 대기 시간이 긴 프로세스를 기다리는 것 보다 짧아지므로 평균 대기 시간이 감소합니다.
 
-	하지만 SJF 알고리즘은 구현이 거의 불가능한데, 컴퓨터 입장에서는 프로세스의 CPU 버스트 타임의 길이가 얼마인지 알 수 있는 방법이 없기 때문입니다.
+	하지만 SJF 알고리즘은 구현이 굉장히 어려운데, 컴퓨터 입장에서는 프로세스의 CPU 버스트 타임의 길이가 정확히 얼마인지 알 수 있는 방법이 없기 때문입니다. (CPU 버스트 타임을 예측해야함)
+
+	SJF 알고리즘은 비선점 스케줄링을 할 수도 있고 선점 스케줄링을 할 수도 있습니다.
+
+	예측한 CPU 버스트 타임을 현재 프로세스가 넘기게 되면 다른 프로세스에게 넘기는 방식으로 할 수 있기 때문입니다. (SRTF 스케줄링)
 
 - RR(Round-Robin)
+
+	선점형 스케줄링으로, FCFS 알고리즘 처럼 동작하지만 프로세스마다 실행시간을 부여해 해당 시간만큼만 실행하고 다른 프로세스한테 넘겨줍니다.
+
+	프로세스의 실행시간은 짧은 시간을 부여해야합니다. (10 ~ 100 ms) 단, 너무 짧은 시간이 주어지면 계속해서 짧은시간에 context switch가 계속해서 이뤄지면서 오히려 안좋아집니다.
+
+	Ready Queue는 Circular Queue로 구현되며 프로세스가 시간을 다 쓰면 OS가 인터럽트를 걸어서 현재 프로세스가 가장 뒤로 가는 방식입니다.
+
 - Priority-based
 
-- MLQ(Multi Level Queue)
-- MLFQ(Multi-Level Feedback Queue)
+	프로세스가 Ready Queue에 도착하면 우선순위를 비교하여 우선순위가 가장 높은 프로세스에 CPU를 할당하는 방식입니다.
+
+	만약 우선순위가 같다면 FCFS 방식으로 작동합니다.
+
+	SJF 알고리즘도 일종의 우선순위 스케줄링 방식입니다. (프로세스의 CPU 버스트 타임기준으로 실행)
+
+	선점형과 비선점형 스케줄링이 모두 가능합니다.
+
+	높은 우선순위의 프로세스가 계속오면 낮은 우선순위의 프로세스는 무한 대기해 starvation(기아) 현상이 올 수 있습니다.
+
+	starvation 문제는 aging으로 해결할 수 있습니다. 예를들어, 대기시간이 늘어날 수록 우선순위를 증가시키면 됩니다.
+
+- MLQ(Multi Level Queue) 다단계 큐 스케줄링
+
+	각 큐는 절대적인 우선순위를 가지며 우선순위가 높은 큐가 모두 비어있기 전까지는 낮은 우선순위의 큐에 있는 프로세스는 실행이 불가능합니다.
+
+	우선순위가 낮은 큐의 프로세스는 starvation 현상이 일어날 수 있습니다.
+
+	<img src = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fe01d4ca-7d04-46fe-bb95-dab42f460bf2/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210908%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210908T050658Z&X-Amz-Expires=86400&X-Amz-Signature=5ac245c05b112715650fc0e89589380249b5a7d2e9728f9a03739b6852efb5cc&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" width = "40%" height = "40%">
+	
+- MLFQ(Multi-Level Feedback Queue) 다단계 피드백 큐 스케줄링
+
+	MLQ에서 계속해서 프로세스를 선점하지 못하는 프로세스에 대해 큐를 이동 시켜주는 방식을 사용합니다.
+	즉, 다단계 큐 방식에서 오래 대기한 프로세스가 높은 레벨의 대기 큐로 이동합니다.
+	
+	또는 프로세스 버스트 시간이 짧은 프로세스에 높은 우선순위를 주어 일찍 종료시키거나 시간이 너무 오래걸리면 낮은 우선순위로 변경시킵니다.
+
+	<img src = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/329b685f-1508-499c-bdb5-ffa3f0aa04e4/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210908%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210908T051039Z&X-Amz-Expires=86400&X-Amz-Signature=d6c5376d0053c898fd7ee8f8dcc5710df5575b1f6d36dd6a36b10dd7ed6669cc&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" width = "40%" height = "40%">
+	
+CPU 스케줄링의 실제 대상은 커널 쓰레드입니다.
+
+사용자 쓰레드는 사용자 라이브러리에서 관리됩니다.
