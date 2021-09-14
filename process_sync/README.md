@@ -131,4 +131,5 @@ while (true) {
 
 - 선점형 커널
 
-	
+	계속해서 context switch가 일어나기 때문에 race condition 문제가 발생할 수 있습니다.
+	즉, 임계영역을 만들어 문제가 생기지 않도록 막아야 합니다.
