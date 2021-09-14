@@ -86,3 +86,12 @@
 - 작업을 기다리는 풀에 여러 개의 쓰레드를 만듭니다.
 > Fork & join
 - 명시적인 쓰레딩 방법이지만 Implicit Threading(암묵적인 쓰레딩)에도 적합한 후보입니다.
+> OpenMP
+- 지시자를 C/C++ 프로그램에 삽입하여 Implicit Threading을 지원합니다.
+> Grand Central Dispatch
+- Mac OS, IOS 전용으로 Implicit Threading을 구현하는 방법입니다.
+
+### OpenMP
+- 병렬 영역을 병렬로 실행할 수 있는 코드 블록으로 식별합니다.
+- 병렬영역의 소스 코드에 컴파일러 지시어를 삽입합니다.
+- 컴파일러 지시문은 OpenMP 런타임 라이브러리에서 해당 영역을 병렬로 실행하도록 지시합니다.
