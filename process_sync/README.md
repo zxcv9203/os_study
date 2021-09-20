@@ -107,7 +107,7 @@ while (true) {
 ```
 
 ## 임계영역의 해결방안
-- 상호 배제(Mutual exclution)
+- 상호배제(Mutual exclution)
 
 	하나의 프로세스가 임계 영역(critical section)에 들어가 있다면 다른 프로세스는 들어갈 수 없어야 합니다.
 
