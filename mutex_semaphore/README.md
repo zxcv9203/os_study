@@ -95,11 +95,13 @@ signal(s) {
 - 할당가능한 자원수로 세마포어 변수를 초기화합니다.
 - 프로세스가 자원을 사용하려고 하면 wait()을 호출하여 값을 1 감소시킵니다.
 - 프로세스가 자원을 다 사용하면 signal()을 호출하여 값을 다시 증가시킵니다.
+
 ``` c++
 typedef struct {
 	int value;
 	struct process *list;
 } semaphore;
+
 wait(semaphore *s) {
 	s->value--;
 	if (s->value < 0) {
@@ -107,6 +109,7 @@ wait(semaphore *s) {
 		sleep();
 	}
 }
+
 signal(semaphore *s) {
 	s->value++;
 	if (s->value <= 0) {
@@ -115,3 +118,135 @@ signal(semaphore *s) {
 	}
 }
 ```
+
+## 세마포어 사용의 어려움
+
+세마포어는 동기화에 편리하고 효과적인 방법이지만 특정 시퀀스가 발생하는 경우 타이밍 오류가 발생할 수 있습니다.
+
+특정 시퀀스는 항상 일어나지도 않고 잡기도 어렵습니다.
+
+예를 들어 이진 세마포어에서 wait()후 signal()을 지키지 않으면 임계영역에 두개의 프로세스가 들어가서 문제가 생길 수 있습니다.
+
+``` c++
+signal(mutex);
+	critical section
+wait(mutex);
+```
+
+```c++
+wait(mutex);
+	critical section
+wait(mutex);
+```
+
+세마포어와 뮤텍스 같은 경우 실수가 발생할 위험이 커서 이 실수를 줄이고자 `monitor` 라는 방법을 사용하게 됩니다.
+
+# monitor(모니터)
+
+모니터 타입은 상호 배제를 하기 위한 하나의 타입입니다. 자바의 경우 클래스라고 생각하면 됩니다.
+
+``` 
+monitor monitor name
+
+function P1(...) {
+	// code
+}
+
+function P2(...) {
+	// code
+}
+
+function Pn(...) {
+	// code
+}
+
+init_code(...) {
+	// code
+}
+```
+
+- 모니터는 다음과 같은 흐름을 가집니다.
+
+	![monitor_process](./image/333333.PNG)
+
+## condition value
+
+모니터 자체로는 프로세스 동기화를 모델링하기에 충분하지 않기 때문에 condition value 를 선언하여 추가해줍니다.
+
+컨디션 변수는 어떤 실행을 상태가 원하는 것과 다를 때 조건이 참이 되기를 기다립니다.
+
+```
+condition x, y;
+x.wait();
+x.signal();
+y.wait();
+y.signal()
+```
+
+![condition_value](./image/condtion_Value.PNG)
+
+## java monitor
+
+java는 스레드 동기화를 위해 모니터와 같은 것을 제공합니다.
+
+모니터 락이라고 불립니다.
+
+자바에서 동기화 하기 위해서는 `synchronized` 키워드와 `wait()` `notify` 메서드를 알고 있으면 됩니다.
+
+### syncronized keyword
+
+임계영역에 해당하는 코드 블록을 선언할 때 사용하는 자바 키워드입니다.
+
+해당 코드 블록(임계영역)에는 모니터락을 획득해야 진입 가능합니다.
+
+모니터락을 가진 객체 인스턴스를 지정할 수 있습니다.
+
+메서드에 선언하면 메서드 코드 블록 전체가 임계영역으로 지정됨
+
+이 때, 모니터락을 가진 객체 인스턴스는 this 객체 인스턴스입니다.
+
+``` java
+synchronized (object) {
+	// critical section
+}
+
+public syncronized void add() {
+	// critical section
+}
+```
+
+### wait() and notify() 메서드
+
+java.lang.Object 클래스에 선언된 모든 자바 객체가 가지고 있는 메서드입니다.
+
+쓰레드가 어떤 객체의 wait() 메서드를 호출하면 해당 객체의 모니터락을 획득하기 위해 대기 상태로 진입합니다.
+
+쓰레드가 어떤 객체의 notify() 메서드를 호출하면 해당 객체 모니터에 대기 중인 쓰레드 하나를 깨웁니다.
+
+notify() 대신에 notifyAll() 메서드를 호출하면 해당 객체 모니터에 대기중인 쓰레드 전부를 깨웁니다.
+
+# Liveness
+
+임계영역에 대한 해결방안으로 알아본 뮤텍스, 세마포어, 모니터는 상호배제만 해결이 가능합니다.
+
+Liveness(라이브니스)는 진행(Progress), 한정대기(bounded-waiting)문제를 해결할 수 있습니다.
+
+## deadlock
+
+두 개 이상의 프로세스가 서로 상대방의 작업이 끝나기 만을 기다리고 있기 때문에 무한 대기에 빠지는 상황을 말합니다.
+
+## Priority Inversion
+
+높은 우선순위를 가지는 프로세스가 낮은 우선순위를 가진 프로세스보다 늦게 실행되는 현상입니다.
+
+예를들어, 프로세스 3개가 존재하고 `P1 > P2 > P3`와 같은 우선순위를 가지고 있다고 할때, P1과 P3는 실행시 공유자원에 접근을 해야되고 P2는 공유자원에 접근하지 않는다고 합시다.
+
+가장 먼저 P3가 실행된다고 하면 공유자원 접근을 위해 lock을 획득하고 다른 프로세스 이 자원에 접근할 수 없게됩니다.
+
+이 때 P1이 공유자원의 접근이 필요해지면 lock을 획득해야 하는데 이미 P3가 점유하고 있으므로 대기 하게 됩니다.
+
+이 때 공유자원이 필요없는 P2가 실행하려고 했을 때 P3보다 우선순위가 높기 때문에 P3를 대기시키고 P2가 실행됩니다.
+
+P2의 작업이 완료되면 P3는 다시 작업을 시작하고 P3가 종료되면 P1이 실행됩니다.
+
+이런식으로 우선순위가 역전되는 상황을 Priority Inversion(우선 순위 역전)이라고 합니다.
